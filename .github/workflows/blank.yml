@@ -1,46 +1,34 @@
-name: Update TC Repo File
+name: Update Another Repo File
 
 on:
-  workflow_dispatch:  # Manual trigger, you can run this from GitHub UI
+  workflow_dispatch:  # Manual trigger, easy to test
 
 jobs:
-  update-tc-repo:
-    runs-on: windows-latest
+  update-external-repo:
+    runs-on: ubuntu-latest  # or windows-latest if you prefer
 
     steps:
-      - name: Checkout Utility repo
+      - name: Checkout current repo
         uses: actions/checkout@v3
 
-      - name: Clone TC-Repo
+      - name: Clone external repo
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
-          git clone https://x-access-token:${env:GITHUB_TOKEN}@github.com/saran178/TC-Repo.git
+          git clone https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/saran178/TC-Repo.git
 
-      - name: Copy and edit sample.txt
-        shell: pwsh
+      - name: Edit file in external repo
         run: |
-          $filePath = "TC-Repo\sample.txt"
+          echo "Appending date to sample.txt"
+          echo "Updated by GitHub Actions on $(date -u)" >> TC-Repo/sample.txt
 
-          # Optional: Display original content
-          Write-Output "Original content of sample.txt:"
-          Get-Content $filePath
-
-          # Append a line with the current date and time
-          Add-Content $filePath "`nUpdated by Utility Action on $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
-
-          # Optional: Display updated content
-          Write-Output "Updated content of sample.txt:"
-          Get-Content $filePath
-
-      - name: Commit and push changes to TC-Repo
+      - name: Commit and push changes to external repo
         working-directory: TC-Repo
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-        shell: pwsh
         run: |
-          git config user.name "saran178"
-          git config user.email "saran178@users.noreply.github.com"
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
           git add sample.txt
-          git commit -m "Updated sample.txt from Utility repo via GitHub Actions"
-          git push https://x-access-token:${env:GITHUB_TOKEN}@github.com/saran178/TC-Repo.git main
+          git commit -m "Update sample.txt via GitHub Actions"
+          git push https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/saran178/TC-Repo.git main
