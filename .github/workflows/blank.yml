@@ -27,7 +27,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
           git config --global user.email "saravanan.i@intelizign.com"
-          git config --global user.name "saran178"
+          git config --global user.name "saran"
           git add sample.txt
           git commit -m "Update sample.txt via GitHub Actions"
           git push https://x-access-token:${GITHUB_TOKEN}@github.com/saran178/TC-Repo.git main
