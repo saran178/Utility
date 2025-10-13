@@ -36,8 +36,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       shell: pwsh
       run: |
-        git config user.name "saran178"
-        git config user.email "saran178@github.com"
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
         git add sample.txt
         git commit -m "Updated sample.txt from Utility repo via GitHub Actions"
         git push https://x-access-token:${env:GITHUB_TOKEN}@github.com/saran178/TC-Repo.git main
