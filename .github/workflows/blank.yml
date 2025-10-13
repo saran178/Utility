@@ -1,28 +1,27 @@
-name: Update Another Repo File
+name: Update TC Repo File
 
 on:
-  workflow_dispatch:  # Manual trigger, easy to test
+  workflow_dispatch:
 
 jobs:
-  update-external-repo:
-    runs-on: ubuntu-latest  # or windows-latest if you prefer
+  update-tc-repo:
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout current repo
+      - name: Checkout Utility repo
         uses: actions/checkout@v3
 
-      - name: Clone external repo
+      - name: Clone TC-Repo
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
           git clone https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/saran178/TC-Repo.git
 
-      - name: Edit file in external repo
+      - name: Edit sample.txt
         run: |
-          echo "Appending date to sample.txt"
           echo "Updated by GitHub Actions on $(date -u)" >> TC-Repo/sample.txt
 
-      - name: Commit and push changes to external repo
+      - name: Commit and push changes to TC-Repo
         working-directory: TC-Repo
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -31,4 +30,4 @@ jobs:
           git config user.email "github-actions@github.com"
           git add sample.txt
           git commit -m "Update sample.txt via GitHub Actions"
-          git push https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/saran178/TC-Repo.git main
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/saran178/TC-Repo.git main
