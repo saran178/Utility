@@ -11,23 +11,27 @@ jobs:
       - name: Checkout Utility repo
         uses: actions/checkout@v3
 
-      - name: Clone TC-Repo
+      - name: Clone TC Repo using PAT
         env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          MY_PAT: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
-          git clone https://x-access-token:${GITHUB_TOKEN}@github.com/saran178/TC-Repo.git
+          git clone https://x-access-token:${MY_PAT}@github.com/saran178/TC-Repo.git
 
-      - name: Edit sample.txt
+      - name: Edit sample.txt in TC Repo
         run: |
           echo "Updated by GitHub Actions on $(date -u)" >> TC-Repo/sample.txt
 
-      - name: Commit and push changes to TC-Repo
+      - name: Commit and push changes
         working-directory: TC-Repo
         env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          MY_PAT: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
           git config --global user.email "saravanan.i@intelizign.com"
           git config --global user.name "saran"
           git add sample.txt
           git commit -m "Update sample.txt via GitHub Actions" || echo "No changes to commit"
-          git push https://x-access-token:${GITHUB_TOKEN}@github.com/saran178/TC-Repo.git main
+          
+          # Set remote URL with token to authenticate push
+          git remote set-url origin https://x-access-token:${MY_PAT}@github.com/saran178/TC-Repo.git
+
+          git push origin main
