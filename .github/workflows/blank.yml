@@ -15,7 +15,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
-          git clone https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/saran178/TC-Repo.git
+          git clone https://x-access-token:${GITHUB_TOKEN}@github.com/saran178/TC-Repo.git
 
       - name: Edit sample.txt
         run: |
@@ -29,5 +29,5 @@ jobs:
           git config --global user.email "saravanan.i@intelizign.com"
           git config --global user.name "saran"
           git add sample.txt
-          git commit -m "Update sample.txt via GitHub Actions"
+          git commit -m "Update sample.txt via GitHub Actions" || echo "No changes to commit"
           git push https://x-access-token:${GITHUB_TOKEN}@github.com/saran178/TC-Repo.git main
